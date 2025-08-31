@@ -12,10 +12,14 @@ DigitalOut led(LED1);
 
 std::chrono::milliseconds delay = 2ms;
 
+std::vector<DigitalOut> stepper = {blue, pink, yellow, orange};
+
 float maxDelayMs = 50.0f;
 
 int main()
 {
+    int n = 0;
+
     while (true) {
         float potValue = pot.read();
         float delayMs = potValue * maxDelayMs;
@@ -23,28 +27,14 @@ int main()
 
         led = !led;
 
-        blue = false;
-        pink = false;
-        yellow = true;
-        orange = true;
-        ThisThread::sleep_for(delay);
+        int count = stepper.size();
 
-        blue = true;
-        pink = false;
-        yellow = false;
-        orange = true;
-        ThisThread::sleep_for(delay);
+        for (int i = 0; i < count; i++) {
+            stepper[i] = (i == n || i == ((n+1) % count));
+        }
 
-        blue = true;
-        pink = true;
-        yellow = false;
-        orange = false;
-        ThisThread::sleep_for(delay);
+        n = (n + 1) % count;
 
-        blue = false;
-        pink = true;
-        yellow = true;
-        orange = false;
         ThisThread::sleep_for(delay);
     }
 }
