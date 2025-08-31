@@ -18,7 +18,7 @@ float maxDelayMs = 50.0f;
 
 int main()
 {
-    int n = 0;
+    int cycle = 0;
 
     while (true) {
         float potValue = pot.read();
@@ -30,10 +30,10 @@ int main()
         int count = stepper.size();
 
         for (int i = 0; i < count; i++) {
-            stepper[i] = (i == n || i == ((n+1) % count));
+            stepper[i] = (i == cycle || i == ((cycle + 1) % count));
         }
 
-        n = (n + 1) % count;
+        cycle = (cycle + 1) % count;
 
         ThisThread::sleep_for(delay);
     }
